@@ -1,0 +1,30 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Mario Dohr}
+\title{Supervised Learning}
+\begin{document}
+\maketitle
+\section{Introduction}
+\begin{itemize}
+\item Learning a function that maps an input to an output (=target).
+\item Learning is based on example input values with corresponding target values.
+\item Typical usage: train model on dataset with input + target values and then use the model to predict target values for new inputs.
+\item Two types: Classification and Regression
+\end{itemize}
+
+\textbf{Terminology}
+\begin{itemize}
+\item Model: parameterized function with specific parameter values
+\item Model class: the class of models in which we search for the model (e.g. neural network, SVM, etc)
+\item Parameters representation of concrete models inside the given model class
+\item Hyperparameters: paramters controlling the model complexity. Not learned. E.g. number of neurons in NN)
+\end{itemize}
+
+Generalization Error/Risk
+\$ R(g(.;w))\$
+\end{document}
