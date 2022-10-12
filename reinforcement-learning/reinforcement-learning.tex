@@ -1,0 +1,124 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\author{Mario Dohr}
+\title{Reinforcement Learning}
+\begin{document}
+\section{Introduction}
+Reinforcement Learning is learning from actions.
+
+Three central Characteristics:
+\begin{itemize}
+\item Closed-loop problems: actions of agents influence its later observations
+\item No direct instructions: the agent is not told which action to take.
+\item No initial knowledge: the agent has to figure out the consquences of its actions.
+\end{itemize}
+
+Difference to Suppervised learning: 1. Agent must learn from own experience. 2. No supervisor tell what to do
+
+Difference to unsupervised learning: 1. No predefined data. 2. Agent tries to maximize reward.
+
+\textbf{Reinforcement learning}: Given: an environment and a reward signal. Find: a behavior that maximizes total reward over time.
+
+\textbf{Questions}: 1. How maximize reward? 2. How find highly rewarded actions?
+
+How to maximize total reward: exploit our knowledge about past. take currently optimal action (How do we know that?)
+
+We need to explore the environment by taking random actions from time to time.
+
+Dilemma: trade-off between exploration (Erkundung) and exploitation (Ausnutzung):
+\begin{itemize}
+\item to obtain reward an agent must favor actions that have proven to be benificial in the past (Exploitation).
+\item to discover such actions, an agent has to try actions that it has not selected before (Exploration).
+\end{itemize}
+
+\textbf{Examples:}
+\begin{itemize}
+\item a animal learn to walk.
+\item playing chess
+\item trash collection robots: has to decide search more trash or go to recharge.
+\item Computer games
+\item OpenAI Gym is a python library for reinforcement learning
+\end{itemize}
+
+\textbf{Commonalities}
+\begin{itemize}
+\item interaction between agent and environment
+\item agents seek to achieve a goal in their environment, despite uncertainty
+\item actions affect the future state of the environment
+\item has to take into to account indirect, delayed consequences of actions
+\item consequences of actions can't be fully predicted
+\item agents use experience
+\item interaction with environment is essential
+\end{itemize}
+
+\subsection{Elements of Reinforcement Learning}
+\begin{itemize}
+\item Environment: for example: the universe, one street, coffee machine, chess board ...
+\item States: represents the environments current condition: a position, temperature, etc.
+\item Actions: for each state there is a set of actions. E.g. turning steering wheel, move in a particular direction, ...
+\item Policy: A policy completely determines its behavior. E.g. if car leaves street, seer in the other direction, if pressure to high, decrease current to heating element, move to a position with high expected future reward. Is a property of the agent. An agent has a specific policy at a specific time.
+\item Reward: Is given out from the environment and encodes how good the agent is doing currently. Given from environment, not the agents knowledge. E.g.: winning or loosing the game, car stays on the street, does not crash. 
+\item Value functions: is compressed knowledge about the future, it encodes an agent's experience. E.g.: eat cake, feel good. Turn steering wheel D degrees avoid a crash.
+\end{itemize}
+
+\paragraph{Policy}
+The behavior of an agent is called a policy. The policy:
+\begin{itemize}
+\item maps a state to a probability distribution over actions
+\item samples from this distribution to select an action
+\end{itemize}
+
+We can say an RL agent follows a policy (behaves a certain way) and updates its policy (to try and maximize reward)
+
+The policy completely determines its behavior, deciding which action to take at a given state.
+
+The policy is that, what the agent should learn???
+
+\paragraph{Policy implementation} Is a mapping from states to actions. Could be
+\begin{itemize}
+\item a lookup table
+\item a simple function
+\item a search process
+\item a DNN
+\item a combination
+\end{itemize}
+
+\paragraph{Reward Signal}. Defines the goal in a RL problem. The reward:
+\begin{itemize}
+\item is a single real number
+\item is perceived by the agent at each time step
+\item defines what is good and what is bad
+\item is immediate and defines features of the problem
+\item primary basis for changing the policy
+\end{itemize}
+
+\paragraph{Value Function} Defines what is good in the long run. 
+\begin{itemize}
+\item is the total amount of reward an agent can expect to accumulate in the future starting from that state
+\item usually an estimate
+\item often used to choose an action
+\end{itemize}
+
+\paragraph{Reward vs. Value}
+\begin{itemize}
+\item rewards are immediate, part of environment
+\item values are predictions of future reward, part of the agent
+\item rewards are used, in order to estimate value
+\item the only purpose of estimation values is to get more reward in the long run
+\item most RL algos focus on efficient value estimation
+\item a state might yield a low immediate reward but still have a high value because it is usually followed by benificial states.
+\end{itemize}
+
+\paragraph{Model environment}
+Model-based methods vs model-free methods.
+
+\paragraph{Boundaries}
+Boundary between Agent and Environment?  \textcolor{red}{Fill summary of Example with the fish} this is temporal-difference-learning.
+
+\end{document}
