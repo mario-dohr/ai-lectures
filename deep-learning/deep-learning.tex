@@ -3,11 +3,111 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{xcolor}
 \author{Mario Dohr}
 \title{Deep Learning}
 \begin{document}
 \maketitle
 
- 
+\section{Basic neural network architectures}
+The loss function gives the loss for one sample. For example the squared loss is $L(y,\tilde{y}) = (y-\tilde{y})^2$.
+The risk is the expectation of the loss $R\mathbb{E}_z(L(y,\tilde{y}))$ and the empirical risk is 
+$R_{emp} = \frac{1}{N} \sum_{n=1}^N L(y^n,\tilde{y}^n)$. This is the function we try to minimize to find the parameters of the neural network.
+\subsection{Linear model:Neuron}
+In this simple model we express $y$ as a linear function of x
+\[ y = w_1 x + x_0\]
+We try to find a line which minimizes the deviation between y and the regression line. The line that optimizes the criterion is
+the \textit{least square line}.
 
+\subsubsection{Model}
+The linear neural network is
+\[ g(x;w) = a = w^Tx \]
+The general form is 
+\[ y = g(x;w) + \epsilon\]
+where $\epsilon$ is assumed as Gaussian noise with $\epsilon \sim \mathcal{N}(0,\sigma)$. This means, that 
+\[ p(y | x, w, \sigma) = \mathcal{N}(y | (g(x;w), \sigma) \]
+This means, we are looking for the mean of this distribution.
+\[ \mathbb{E}(y | x) = \int y p(y | x) dy = g(x;w) \]
+
+\subsubsection{Loss function}
+To solve the problem we use the maximum likelihood approach.
+\[ p(y | X, w, \sigma = \prod_{n=1}^N p( y^n | x^n, w, \sigma) = 
+\prod_{n=1}^N  \frac{1}{\sqrt{2 \pi \sigma^2}} \exp - \frac{(y^n - w^T x^n)^2}{2 \sigma^2} \]
+But we don't try to maximize the likelihood but the negative log-likelihood
+\[ \log p(y | X, w, \sigma) = -\frac{N}{2}\log(2\pi\sigma^2) - \frac{1}{\sigma^2} S(w, X, y)\]
+where 
+\[ S(w, X, y) = \frac{1}{2} \sum_{n=1}^N (\underbrace{y^n - w^Tx^n}_{\epsilon^n})^2\]
+where $S$ is the \textit{sum of squared residuals} and $L(y,g(x,w)) = \frac{1}{2}(y - g(x,q))^2$ is the \textbf{squared loss}.
+To maximize the likelihood we only need to minimize the negative log-likelihood we only need to minimize $S(\tilde{w}, X,y) = S(\tilde{w})$, since the $\log$ is monotone and  all other terms are constant.
+\[ S(\tilde{w}) = \frac{1}{2} \sum_{n=1}^N (y^n - \tilde{w}^Tx^n)^2 = \frac{1}{2} (y - X\tilde{w})^T(y - X\tilde{w})\]
+
+\subsubsection{Learning}
+To solve this, we have to solve 
+\[ \tilde{w} = \arg \min_{\tilde{w}} S(\tilde{w})\]
+This can be done be taking the derivative and set this to zero to get a closed form solution.
+\[ \nabla_w \log p(y | X, w, \sigma) = \frac{1}{\sigma^2} \sum_{n=1}^N (w^Tx^n - y^n)x^n \]
+From that we get the closed form solution
+\[ \tilde{w} = (X^T X)^{-1}X^Ty\]
+
+Another way to solve this is (stochastic) gradient descent.
+\[ w^{new} = w^{old} - \eta \nabla_w S(w)\]
+
+\subsection{Perceptron}
+The perceptron is used for linear binary classification tasks. The classes are $y \in \{-1,1\}$
+
+\subsubsection{Model}
+For the perceptron we use the following model
+\[ g(x;w) = sign(g(x;w)) = a = sign(w^Tx) \]
+Here we are looking for a hyperplane which separates  the labels. The perceptron only works for labels that are linearly separable.
+
+\subsubsection{Loss function}
+
+\[ L(y,g(x,w)) = \begin{cases}
+0, & \text{if } ysign(w^Tx) \geq 0 \\
+-y w^Tx & \text{else} \\
+\end{cases} \]
+
+The empirical error is 
+\[ R_{emp}(y,X,w) = -\sum_{n=1; y^n a^n = -1} y^n w^Tx^n \]
+ 
+\subsubsection{Learning}
+We use gradient descent to find the solution. First we need the derivative of $R_{empg}$ with respect to $w$.
+\[ \nabla_w R_{emp}(y, X, W) = \nabla_w -  \sum_{n=1; y^n a^n = -1} y^n w^Tx^n = -\sum_{n=1;a^n y^n} = y^n x^n\]
+
+if the data is linearly separable, then this algorithm converges, but there is no unique solution. The solution depends on the initial weights $w$.
+
+\textcolor{red}{insert convergence theorem}
+
+\subsection{Logistic regression - sigmoid}
+The logistic regression is also used for binary classification tasks.  The classes are $y \in \{0,1\}$
+To overcome the shortcomings of the perceptron we use a non-linear activation function $\sigma(z) = \frac{1}{1 + e^z}$, so it is also possible to classify data that is not linear separable.
+
+\subsubsection{Model}
+We get the following model 
+\[  g(x;w) = a = \sigma(w^Tx)\]
+The derivative is $\sigma'(z)=\sigma(z)(1-\sigma(z))$
+
+\subsubsection{Loss function}
+The sigmoid function takes values in $(0,1)$ and can be interpreted as a probability. So to solve this we use maximum likelihood again. (Bernoulli distribution)
+\[ p(y = 1 | x, w) = g(x;w)\]
+\[ p(y = -1 | x, w) = (1 - g(x;w))\]
+We can write this in a more compact form
+\[ p(y | x, w) = g(x;w)^y(1-g(x;w))^{1-y}\]
+Therefore we get the following likelihood
+\[ p(y | X, w) = \prod_{n=1}^N g(x^n;w)y^n(1 - g(x^n;w)^{1-y^n}\]
+Because we have a product of numbers between $0$ and $1$ the product can get very small and this can get numerically unstable. 
+To find a solution we again take the negative log likelihood. 
+The negative log likelihood is 
+\[ -\log p(y | X, w) = - \sum_{n=1}^N y^n \log g(x^n;w) + (1-y^n)\log(1 - g(x^n;w)\]
+where $ L(y,g(x;w)) = -(y \log g(x;w) + (1-y)\log(1 - g(x;w))$ is called the \textit{binary cross-entropy}.
+\[ \nabla_w - log(y | X,w) = \nabla_w R_{emp}(y, X, w) = \sum_{n=1}^N (\sigma(w^Tx^n)-y^n)x^n\]
+So the gradient is a weighted sum of the samples. 
+\subsubsection{Learning}
+For learning we have two options:
+\begin{itemize}
+\item gradient descent with $\nabla_w R_{emp}(y, X, W)$
+\item use the second derivative (Hessian). Newton algorithm to find a zero.
+\end{itemize}
+\textcolor{red}{AMS example - Problem with biased dataset}
+\textcolor{red}{describe algorithm for Hessian} \textcolor{red}{optimization intermezzo}
 \end{document}
