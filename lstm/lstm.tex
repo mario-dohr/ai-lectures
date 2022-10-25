@@ -4,6 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{xcolor}
+\numberwithin{equation}{section}
 \author{Mario Dohr}
 \title{LSTM and Recurrent Neural Nets}
 \begin{document}
@@ -69,7 +70,21 @@ where $y(1:T)$ is a sequence of lenth $T$.
 \subsubsection{BPTT for the fully connected network}
 The gradient $\nabla_w L$ decomposes into three parts, according to the weight matrices $W$, $R$ and $V$.
 
-We start with the output weights. $v_{ik}$ connects the $i-th$ input unit with the $k-th$ output unit, because we multiply with $V^T$.
+We start with the output weights. $v_{ik}$ connects the $i-th$ input unit with the $k-th$ output unit, because we multiply with $V^T$. So we get
+\begin{equation}
+\frac{\partial L}{\partial v_{ik}} 
+= \sum_{t=1}^T \frac{\partial L(y(t),\tilde{y}(t))}{\partial \tilde{y}(t)} \frac{\partial \tilde{y}(t)}{\partial v_{ik}} 
+= \sum_{t=1}^T \frac{\partial L(y(t),\tilde{y}(t))}{\partial \tilde{y}_k(t)} \frac{\partial \tilde{y}_k(t)}{\partial v_{ik}} 
+\end{equation}
 
+The second equation comes from the fact, that $\tilde{y}_k = v_i \cdot a$, where $v_i$ is the $i-th$ row vector of $V^T$ and $a$ is an activation of the last layer.
+
+The term $\frac{\partial L}{\partial \tilde{y}_k(t)} $ is the derivative with respect to the $k-th$ component of the model output. We will call this term $e_k(t)$. To calculate this term we only need to know the loss function. If we choose the halved squared error we get the following:
+
+
+\begin{equation}
+L(y(t),\tilde{y}(t)) = \frac{1}{2} \|y(t) - \tilde{y}(t) \|^2 \text{   then   } 
+e_k(t) = \frac{\partial L}{\partial \tilde{y}_k(t)} = \tilde{y}_k(t) - y_k(t).
+\end{equation}
 
 \end{document}
