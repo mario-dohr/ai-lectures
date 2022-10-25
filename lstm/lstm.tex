@@ -1,0 +1,75 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\author{Mario Dohr}
+\title{LSTM and Recurrent Neural Nets}
+\begin{document}
+\maketitle
+\section{Simple Recurrent Networks}
+In contrast to a simple feedforward network a recurrent network has a loop. That is, in a RNN the output of a previous timestep is again feed into the network. This enables RNNs to "remember" past inputs and makes them more suitable for processing time series than simple FNNs. 
+Accordingly RNNs map an input sequence $(x(t))_{t=1}^T$ to an output sequence $(\tilde{y}(t))_{t=1}^T$.
+
+In principle FNNs can also process sequences of size $T$, but this requires $T$ to be constant. 
+
+By contrast RNNs can process arbitrarily long sequences with constant parameters and can memorize information over long distances. RNNs allow for \textit{temporal generalization}. That means that learning to store important information at a time step can be generalized to store this information also if it appears at  time steps that are never seen during training. For example an important input that is seen in the training set at time step 5,7,8,9 but never at time step 6, is generalized by RNNs to time step 6 while feedforward networks fail.
+
+\subsection{Jordan Network}
+In a Jordan network the output $\tilde{y}(t-1)$ at time stept $t-1$ is fed back as input at time $t$.
+\[ s(t) = W^T x(t) + R^T \tilde{y}(t) \]
+\[ a(t) = f(s(t)) \]
+\[ \tilde{y}(t) = g(V^T a(t)) \]
+where $W$ are the input weights, $R$ the recurrent weights and $V$ are the output weights, which are all collected in the parameter $w$. 
+$g$ and $f$ are activation functions.
+
+$W$, $R$ and $V$ does not depend on the time step. We use the same weights at all time steps this is called
+\textit{weight sharing}.
+
+\subsection{Elman Network}
+The Elman network is a modification of the Jordan network. It feeds in the hidden units of time step $t-1$ as input to time step $t$. 
+\[ s(t) = W^T x(t) + a(t-1) \]
+\[ a(t) = f(s(t)) \]
+\[ \tilde{y}(t) = g(V^T a(t)) \]
+
+\subsection{Full recurrent network}
+Is a modification of the Elman network. We add parameter $R$ for the recurrent parameters.
+\[ s(t) = W^T x(t) + R^T a(t-1) \]
+\[ a(t) = f(s(t)) \]
+\[ \tilde{y}(t) = g(V^T a(t)) \]
+
+\subsection{other types}
+\textcolor{red}{ergänzen}
+\begin{itemize}
+\item ARMA
+\item NARX
+\item Time delay
+\end{itemize}
+
+\subsection{Summary}
+\begin{itemize}
+\item RNNs implement loops to memorize information over time. The architectures differ in which value (hidden state, output) from the previous time step is fed in in the next time step and where is it fed in.
+\item The hidden states contains more information than the output
+\item Look at the different abstraction levels of the inputs and the units they are connected to for the recurrent layer.
+\end{itemize}
+
+\section{Learning algorithms for RNNs}
+\subsection{Empirical riskminimization via gradient descent}
+As in FNNs we use gradient descent to minimize the empirical risk.
+\[ R_{emp}\Bigl( \bigl\{ y(1:T)^{(n)}, \tilde{y}(1:T)^{(n)} \bigr\}_{n=1}^N  \Bigr) = 
+\frac{1}{N} \sum_{n=1}^N \sum_{t=1}^T L(y(t)^{(n)},\tilde{y}(t)^{(n)} ) \]
+\[ = \frac{1}{N} \sum_{n=1}^N \sum_{t=1}^T L(y(t)^{(n)},g(a(0),x(1:t)^{(n)};w) ) \]
+
+where $y(1:T)$ is a sequence of lenth $T$. 
+
+\subsection{Backprobagation through time (BPTT)}
+\textcolor{red}{ergänzen}
+
+\subsubsection{BPTT for the fully connected network}
+The gradient $\nabla_w L$ decomposes into three parts, according to the weight matrices $W$, $R$ and $V$.
+
+We start with the output weights. $v_{ik}$ connects the $i-th$ input unit with the $k-th$ output unit, because we multiply with $V^T$.
+
+
+\end{document}
