@@ -110,4 +110,49 @@ For learning we have two options:
 \end{itemize}
 \textcolor{red}{AMS example - Problem with biased dataset}
 \textcolor{red}{describe algorithm for Hessian} \textcolor{red}{optimization intermezzo}
+
+\subsection{Softmax regression}
+Is used for multi categories classification. It is a supervised classification task. Examples are image recognition or predicting the next word in a sequence of words (here the classes are all possible words). The classes are usually one-hot encoded.
+
+\subsubsection{Model}
+We use the softmax function:
+\[ g(x,W) = a = softmax(Wx) \]
+\begin{itemize}
+\item we have a weight matrix instead of a weight vector, because multiple outputs
+\item softmax(s) = $ \Bigl (  \frac{e^{s_1}}{\sum_{j=1}^K e^{e_j}}, \cdots, \frac{e^{s_K}}{\sum_{j=1}^K e^{e_j}}  \Bigr )^T $
+\item the result is a probability vector that sums up to 1.
+\end{itemize}
+\textcolor{blue}{exam: calculate softmax vector from W and x}
+
+\subsubsection{Loss function and error}
+\begin{itemize}
+\item Likelihood of the label vector: (Multinomial distribution)
+\[ p(y|a) = \prod_{k=1}^K a_k^{y_k} \]
+\item Categorical cross-entropy loss:
+\[ -\log p(y|a) = -\sum_{k=1}^K y_k \log(a_k) \]
+\item Empirical error
+\[ R_{emp}(W,X,Y) = - \sum_{n=1}^N \sum_{k=1}^K y_{nk} \log(a_{nk}) = -\sum_{n=1}^N \sum_{k=1}^K (y^n)_k \log((a^n)_k)\]
+\end{itemize}
+
+\subsubsection{Learning}
+\textcolor{red}{ganze Herleitung + Erklärung}
+\[ \frac{\partial}{\partial w_{\xi d}} \Bigl (- \sum_{k=1}^K y_k \log(a_k) \Bigr ) = (a_{\xi} - y_{\xi})x_d \]
+
+The derivative w.r.t the weight matrix is
+\[ \nabla_W R_{emp}(W, x, y) = (a - y)x^T \]
+
+This is a convex problem, so gradient descent converge to a unique solution.
+\textcolor{red}{insert comparision linear regression, logistic regression, softmax regression and summary}
+
+\subsection{Single-layer can't solve XOR}
+\textcolor{red}{überarbeiten}
+
+\begin{itemize}
+\item 4 points $x_1=(0,0)$, $x_2=(1,0)$, $x_3=(0,1)$, $x_4=(1,1)$
+\item classify XOR, $x_1$, and $x_4$ are a class
+\item $g_2(x; W, w, b) = w^T \max(0, Wx +b)$ solves this. To get this we need to add an additional layer
+\end{itemize}
+
+\subsection{Multi-layer perceptron}
+
 \end{document}
