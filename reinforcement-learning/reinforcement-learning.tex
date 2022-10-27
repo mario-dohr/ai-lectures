@@ -10,34 +10,47 @@
 \title{Reinforcement Learning}
 \begin{document}
 \section{Introduction}
-Reinforcement Learning is learning from actions.
+What is Reinforcement Learning? RL is the computational approach to learning from interactions.
+RL problems involvle learning "what to do":
+\begin{itemize}
+\item by mapping states to actions
+\item while maximizing total reward
+\end{itemize}
 
-Three central Characteristics:
+\paragraph{Three central Characteristics:}
 \begin{itemize}
 \item Closed-loop problems: actions of agents influence its later observations
 \item No direct instructions: the agent is not told which action to take.
 \item No initial knowledge: the agent has to figure out the consquences of its actions.
 \end{itemize}
 
-Difference to Suppervised learning: 1. Agent must learn from own experience. 2. No supervisor tell what to do
+\paragraph{Differences to Supervised- and Unsupervised learning}
+\begin{itemize}
+\item Difference to Suppervised learning: 1. Agent must learn from own experience. 2. No supervisor tell what to do
+\item Difference to unsupervised learning: 1. No predefined data. 2. Agent tries to maximize reward.
+\end{itemize}
 
-Difference to unsupervised learning: 1. No predefined data. 2. Agent tries to maximize reward.
+\paragraph{Reinforcement}
+Maximize reward.
+\begin{itemize}
+\item \textbf{Given:} an environment and a reward signal
+\item \textbf{Find:} a behavior that maximizes total reward over time
+\end{itemize}
+The agent takes action in the environment and gets back a state and a reward. Challenge is finding actions by exploring, exploit knowledge about good actions to maximize reward.
 
-\textbf{Reinforcement learning}: Given: an environment and a reward signal. Find: a behavior that maximizes total reward over time.
-
-\textbf{Questions}: 1. How maximize reward? 2. How find highly rewarded actions?
-
-How to maximize total reward: exploit our knowledge about past. take currently optimal action (How do we know that?)
-
-We need to explore the environment by taking random actions from time to time.
-
-Dilemma: trade-off between exploration (Erkundung) and exploitation (Ausnutzung):
+\paragraph{Challenges in RL}
+\begin{itemize}
+\item How maximize reward? We need to exploit our knowledge about the past.
+\item How find highly rewarded actions? We need to explore the environment.
+\end{itemize}
+\textbf{Dilemma:} We have a trade-off between \textbf{Explore} and \textbf{Exploit}:
 \begin{itemize}
 \item to obtain reward an agent must favor actions that have proven to be benificial in the past (Exploitation).
 \item to discover such actions, an agent has to try actions that it has not selected before (Exploration).
 \end{itemize}
 
-\textbf{Examples:}
+
+\subsection{Examples}
 \begin{itemize}
 \item a animal learn to walk.
 \item playing chess
@@ -45,7 +58,6 @@ Dilemma: trade-off between exploration (Erkundung) and exploitation (Ausnutzung)
 \item Computer games
 \item OpenAI Gym is a python library for reinforcement learning
 \end{itemize}
-
 \textbf{Commonalities}
 \begin{itemize}
 \item interaction between agent and environment
@@ -59,12 +71,12 @@ Dilemma: trade-off between exploration (Erkundung) and exploitation (Ausnutzung)
 
 \subsection{Elements of Reinforcement Learning}
 \begin{itemize}
-\item Environment: for example: the universe, one street, coffee machine, chess board ...
-\item States: represents the environments current condition: a position, temperature, etc.
-\item Actions: for each state there is a set of actions. E.g. turning steering wheel, move in a particular direction, ...
-\item Policy: A policy completely determines its behavior. E.g. if car leaves street, seer in the other direction, if pressure to high, decrease current to heating element, move to a position with high expected future reward. Is a property of the agent. An agent has a specific policy at a specific time.
-\item Reward: Is given out from the environment and encodes how good the agent is doing currently. Given from environment, not the agents knowledge. E.g.: winning or loosing the game, car stays on the street, does not crash. 
-\item Value functions: is compressed knowledge about the future, it encodes an agent's experience. E.g.: eat cake, feel good. Turn steering wheel D degrees avoid a crash.
+\item \textbf{Environment}: for example: the universe, one street, coffee machine, chess board ...
+\item \textbf{States}: represents the environments current condition: a position, temperature, etc.
+\item \textbf{Actions}: for each state there is a set of actions. E.g. turning steering wheel, move in a particular direction, ...
+\item \textbf{Policy}: A policy completely determines its behavior. E.g. if car leaves street, seer in the other direction, if pressure to high, decrease current to heating element, move to a position with high expected future reward. Is a property of the agent. An agent has a specific policy at a specific time.
+\item \textbf{Reward}: Is given out from the environment and encodes how good the agent is doing currently. Given from environment, not the agents knowledge. E.g.: winning or loosing the game, car stays on the street, does not crash. 
+\item \textbf{Value functions}: is compressed knowledge about the future, it encodes an agent's experience. E.g.: eat cake, feel good. Turn steering wheel D degrees avoid a crash.
 \end{itemize}
 
 \paragraph{Policy}
@@ -73,11 +85,8 @@ The behavior of an agent is called a policy. The policy:
 \item maps a state to a probability distribution over actions
 \item samples from this distribution to select an action
 \end{itemize}
-
-We can say an RL agent follows a policy (behaves a certain way) and updates its policy (to try and maximize reward)
-
+We can say an RL agent follows a policy (behaves a certain way) and updates its policy (to try and maximize reward).
 The policy completely determines its behavior, deciding which action to take at a given state.
-
 The policy is that, what the agent should learn???
 
 \paragraph{Policy implementation} Is a mapping from states to actions. Could be
@@ -120,5 +129,17 @@ Model-based methods vs model-free methods.
 
 \paragraph{Boundaries}
 Boundary between Agent and Environment?  \textcolor{red}{Fill summary of Example with the fish} this is temporal-difference-learning.
+
+\subsection{Example: Gridworld Environment}
+\begin{itemize}
+\item \textbf{States:} we have 11 states: where is the fish?
+\item \textbf{Actions:} In all states we have the same actions. The fish can move. When he moves left in the left bottom the state doesn't change.
+\item \textbf{Loop:} the agent takes an action and receives a new state and a reward.
+\item \textbf{How get food and survive?} We set up a table with the states and the values for the value function.
+\end{itemize}
+
+\textcolor{color}{Lookup gridworld learning}
+
+\section{Multi-armed Bandits}
 
 \end{document}
