@@ -74,8 +74,8 @@ The agent takes action in the environment and gets back a state and a reward. Ch
 \item \textbf{Environment}: for example: the universe, one street, coffee machine, chess board ...
 \item \textbf{States}: represents the environments current condition: a position, temperature, etc.
 \item \textbf{Actions}: for each state there is a set of actions. E.g. turning steering wheel, move in a particular direction, ...
-\item \textbf{Policy}: A policy completely determines its behavior. E.g. if car leaves street, seer in the other direction, if pressure to high, decrease current to heating element, move to a position with high expected future reward. Is a property of the agent. An agent has a specific policy at a specific time.
-\item \textbf{Reward}: Is given out from the environment and encodes how good the agent is doing currently. Given from environment, not the agents knowledge. E.g.: winning or loosing the game, car stays on the street, does not crash. 
+\item \textbf{Policy}: A policy completely determines its behavior. It defines which action an agent can take in a given state. E.g. if car leaves street, seer in the other direction, if pressure to high, decrease current to heating element, move to a position with high expected future reward. Is a property of the agent. An agent has a specific policy at a specific time.
+\item \textbf{Reward signal}: Is given out from the environment and encodes how good the agent is doing currently. Given from environment, not the agents knowledge. It is the primary basis for altering the policy. E.g.: winning or loosing the game, car stays on the street, does not crash. 
 \item \textbf{Value functions}: is compressed knowledge about the future, it encodes an agent's experience. E.g.: eat cake, feel good. Turn steering wheel D degrees avoid a crash.
 \end{itemize}
 
@@ -138,7 +138,7 @@ Boundary between Agent and Environment?  \textcolor{red}{Fill summary of Example
 \item \textbf{How get food and survive?} We set up a table with the states and the values for the value function.
 \end{itemize}
 
-\textcolor{color}{Lookup gridworld learning}
+\textcolor{red}{Lookup gridworld learning}
 
 \section{Multi-armed Bandits}
 
