@@ -141,5 +141,43 @@ Boundary between Agent and Environment?  \textcolor{red}{Fill summary of Example
 \textcolor{red}{Lookup gridworld learning}
 
 \section{Multi-armed Bandits}
+Here we are in a so called \textit{nonassociative} setting, this is we only have one situation or state.
 
+\subsection{k-armed bandits}
+Is inspired by the "slot machines" in casinos. 
+The problem is the following: we have $k$ different options or choices for an action and receive a reward from a probability distribution. We try to maximize the return over time. Each of the action we can take have an expected reward:
+\[ q_{*}(a) = \mathbb{E}[R_t | A_t = a ] \]
+If we would know this, we always would choose the action with the highest reward. But we don't know this, wie only have the estimates $Q_t(a)$, which is the estimated value of action $a$ at time step $t$. We want $Q_t(a)$ close to $q_{*}(a)$.
+
+At every time step, their is one action $a$ with the highest value, this is the greedy action. If we choose this action, we are \textit{exploiting} our knowledge about the values of the actions, but we don't gain new knowledge. If we choose a non-greedy action, we are exploring and gain knowledge about the values of action. 
+There is always a trade-off between \textit{explore} and \textit{exploit}. The need to balance exploration
+and exploitation is a distinctive challenge that arises in reinforcement learning.
+
+\subsection{Action-value Methods}
+We are looking for methods to estimate the value of actions. The true value of an action is the mean reward when selected. We can estimate this with:
+\[ Q_t(a) = \frac{\sum_{i_1}^{t-1}R_t \; 1_{A_t=a}}{\sum_{i=1}^{t-1} 1_{A_i=a} } \]
+By the law of large numbers, $Q_t(a)$ converges to $q_*(a)$.
+The greedy action selection method is
+\[ A_t = \arg\max_a Q_t(a) \]
+This is called the \textit{sample-average} method. This is maybe not the best method. Instead of this you could randomly select another method to explore new knowledge and therefore maybe get higher rewards in the future.
+This is called the $\epsilon$\textit{-greedy} method: With probability $(1-\epsilon)$ the agent take the greedy action and with probability $\epsilon$ it select an action randomly.
+This method also ensures then $Q_t(a) \rightarrow q_*(a)$ for all $a$ and the probability of selecting the optimal solution converges to greater than $1-\epsilon$.
+
+\paragraph{Implementation}
+$Q_{t+1}$ can be computed from $Q_t$:
+\[ Q_{t+1} = \frac{1}{t}\sum_{i=1}^t R_i \]
+\[ = \frac{1}{t}(R_t + (t-1)\frac{1}{(t-1)}\sum_{i=1}^{t-1} R_i)\]
+\[ = Q_t + \frac{1}{t}(R_t + Q_t) \]
+This update rule occurs often in RL. The general form is
+\[ newEstimate = oldEstimate + stepSize[target - old]\]
+
+\subsection{Optimistic initial values}
+All methods we discussed so far, depends on the initial values to some extend. If we have prior knowledge we can use that to get better results. If we don't have prior knowledge but set high (optimistic) values (higher than the highest possible reward), then the algorithm starts exploring. Because when an action is taken, the reward is lower than the current value, so the value of the action is reduced and has lower values then the other actions. 
+
+\subsection{Upper-Confident bound action selection}
+$\epsilon$-greedy selection selects a non-greedy action but randomly with no preference. 
+It would be better to select among the non-greedy actions according to their potential of being optimal.
+\[ A_t = \arg \max_a \Bigl[ Q_t(a) + \sqrt{\frac{\ln t}{N_t(a)}} \Bigr ] \]
+The square root term represents something like a variance or uncertainty in the estimates of $a's$ values. 
+If $a$ is chosen often, this term gets reduced. The $\ln$ ensures, that the increases get smaller over time, if $a$ is not selected, but is still unbounded.
 \end{document}
