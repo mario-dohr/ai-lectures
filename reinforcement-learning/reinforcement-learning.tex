@@ -221,6 +221,43 @@ This can be considered as a consequence of bandit problems. We make the followin
 \paragraph{Agent-Environment}
 
 
-The agent learns and makes decisions. The agent interacts with the environment. The environment is everything that is outside of the control of the agent. Based on the current state $S_t$ the agent decides on the action $A_t$ according to its current policy: $\pi_t(a | s) = Pr \{ A_t = a | S_t = s) \}$. After taking an action, the action receives a reward $R_{t+1}$ and the new state $S_{t+2}$./
+The agent learns and makes decisions. The agent interacts with the environment. The environment is everything that is outside of the control of the agent. Based on the current state $S_t$ the agent decides on the action $A_t$ according to its current policy: $\pi_t(a | s) = Pr \{ A_t = a | S_t = s) \}$. After taking an action, the action receives a reward $R_{t+1}$ and the new state $S_{t+1}$.
+When the agent is in state $s$ and takes action $a$ then, there is a probability for the next state $s'$ and the reward $r$
+\[ p(s',r | s, a) = Pr\{ S_t=s', R_t=r | S_{t-1}=s, A_{t-1}=a \}\]
+This is called the \textit{dynamics}. From the dynamics, anything else someone want to know can be computed. For example the state transition probability:
+\[ p(s',s,a) = \sum_{r \in \mathcal{R}} p(s',r | s,a) \]
+The expected reward from \textit{state-action} pairs:
+\[ r(s,a) = \mathbb{E}[R_t | S_{t-1}=s, A_{t-1} = a] = \sum_{r \in \mathcal{R}} r \sum_{s' \in \mathcal{S}} p(s',r | s,a) \]
+and the expected reward for \textit{state-action-next-state}:
+\[ r(s,a,s') = \mathbb{E}[R_t | S_{t-1}=s, A_{t-1}=a, S_t=s'] = \sum_{r \in \mathcal{R}} r \frac{p(s',r | s,a}{p(s' | s,a)}\]
 
+\subsection{Goals and Rewards}
+The goal of the agent is formalized as a special signal from the environment, the reward, which is a real number. After each action the agent receive such a reward. The goal is, to maximize this reward over the long run and not to maximize the immediate reward. The reward must be chosen appropriately to the goal of the agent. 
+
+\subsection{Returns and Episodes}
+How do we define the goal of maximizing the reward formally? If the sequence of rewards after time step $t$ is denoted $R_{t+1}, R_{t+2}, \cdots$, then we try to maximize the expected value of this sequence.
+\[ G_t = R_{t+1} + R_{t+1} + \cdots + R_{T} \]
+we try to maximize $\mathbb{E}[G_t]$. Here step $T$ is a final time step. If we have such final step, then the agent-environment interactions breaks down in subsequences called \textit{episodes}. If $T=\infty$ this formulation is problematic, since the reward would be infinite.
+
+To tackle this problem we could use a concept called \textit{discounting}. 
+\[ G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \]
+where $ 0 \le \gamma \le 1$. So a reward which is received after $k$ steps is only worth $\gamma^{k-1}$ times of an immediately reward.
+One important fact is, that successive time steps are related to each other:
+\[ G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \gamma^3 R_{t+4} + \cdots \]
+\[ = R_{t+1} + \gamma(R_t{+2} + \gamma R_{t+3} + \cdots ) \]
+\[ = R_{t+1} + \gamma G_{t+1} \]
+This works for all time steps $t < T$, even if termination occurs at $t+1$, if we set $G_T=0$.
+If we set $R_t=0$ for all $t > T$ we get a single notion for terminated and unterminated problems.
+\[ G_t = \sum_{k=t+1}^{\infty} \gamma^{k-t-1} R_k\]
+
+\subsection{Policies and Value Functions}
+Value functions estimates, how good it is to be in a certain state or how good it is to select a specific action in a certain state.
+How good means, expected future rewards. A value function gives the expected future reward based on a policy $\pi$.
+
+The value function of a state $s$ is under a policy $\pi$, denoted as $v_{\pi}(s)$ is the expected reward when starting from state $s$.
+\[ v_{\pi}(s) = \mathbb{E}_{\pi}[G_t | S_t = s] = \mathbb{E}_{\pi} \Bigl [\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | S_t = s \Bigr ], \; \forall s \in \mathcal{S}\]
+
+Similarly we define the value of taking action $a$ in state $s$ under policy $\pi$.
+\[ q_{\pi}(s,a) = \mathbb{E}_{\pi}[ G_t | S_t=s, A_t=a] = \mathbb{E}_{\pi} \Bigl[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | S_t = s, A_t=a \Bigr ] \]
+The value functions $v_\pi$ and $q_\i$ can be estimated from experience.
 \end{document}
