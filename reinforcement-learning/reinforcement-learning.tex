@@ -259,5 +259,61 @@ The value function of a state $s$ is under a policy $\pi$, denoted as $v_{\pi}(s
 
 Similarly we define the value of taking action $a$ in state $s$ under policy $\pi$.
 \[ q_{\pi}(s,a) = \mathbb{E}_{\pi}[ G_t | S_t=s, A_t=a] = \mathbb{E}_{\pi} \Bigl[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | S_t = s, A_t=a \Bigr ] \]
-The value functions $v_\pi$ and $q_\i$ can be estimated from experience.
+The value functions $v_\pi$ and $q_\pi$ can be estimated from experience.
+
+\paragraph{Exercise}
+If the current state is $S_t$, and actions are selected accordingly to policy $\pi$, what is the expected value of $R_{t+1}$ in terms of the \textit{dynamics} and $\pi$?
+\textit{Solution:}
+\[ \mathbb{E}[R_{t+1} | S_t=s] = \sum_a \mathbb{E}[R_{t+1} | S_t=s, A_t = a] \pi(a | s) \]
+\[ = \sum_a \pi(a | s) \sum_r r \sum_{s'} p(s',r | s, a)  \]
+\paragraph{Exercise}
+Give an equation for $v_\pi$ in terms of $q_\pi$ and $\pi$.\\
+\textit{Solution:}
+\[ v_\pi(s) = \mathbb{E}_\pi[G_t | S_t = s ] = \sum_a q_\pi(s,a) \pi(a | s) \]
+\paragraph{Exercise}
+Give an equation for $q_\pi$ in terms of $v_\pi$ and the \textit{dynamics}.\\
+\textit{Solution:} 
+\[ q_\pi(s,a) = \mathbb{E}_\pi [G_t | S_t=s, A_t = a] = 
+\sum_{s'} \mathbb{E}_\pi [G_{t+1} | S_{t+1}=s'] \, p(s' | s,a)\]
+\[ = \sum_{s'} v_\pi(s') \sum_r p(s',r | s,a) \]
+
+A fundamental property of value-functions used throughout reinforcement learning and dynamic programming is, that they satisfy recursive relationships.
+\[  \]
+\begin{align*}
+v_\pi(s) &= \mathbb{E}_\pi[G_t | S_t=s] \\
+&= \mathbb{E}_\pi[ R_{t+1} + \gamma G_{t+1}] \\
+&= \sum_a \pi(a|s) \sum_{s'} \sum_r p(s',r | s,a) \Bigl[r + \gamma \mathbb{E}_\pi[G_{t+1}|S_{t+1}=s'] \Bigr ]\\
+&= \sum_a \pi(a|s) \sum_{s',r} p(s',r | s,a) \Bigl[r + \gamma v_\pi(s') \Bigr ], \; \forall s \in \mathcal{S}\\
+\end{align*}
+This comes from the following facts:
+\[ \mathbb{E}_\pi[R_{t+1} | S_t=s ] = \sum_a \pi(a|s) \sum_{s'} \sum_r p(s',r | s,a), \text{ and } \]
+\[ \mathbb{E}_\pi[G_{t+1} | S_t=s] = \sum_{s'} \mathbb{E}_\pi[G_{t+1} | S_{t+1} = s'] \, p(s'|s) \]
+To calculate $p(s'|s)$ we use the total probability:
+\[ p(s'|s) = \sum_a p(s' | s,a)p(a|s) = \sum_a p(s'|s,a)\pi(a|s) = \sum_a \pi(a|s) \sum_r p(s',r|s,a)\]
+
+\textcolor{red}{Beispiele im Kapitel 3.5 durchgehen, eventuell implementieren}
+
+The equation
+\[ \sum_a \pi(a|s) \sum_{s',r} p(s',r | s,a) \Bigl[r + \gamma v_\pi(s') \Bigr ]\]
+is called the \textbf{Bellman equation} for $v_\pi$. It can be seen as an expectation
+\[\sum_a \sum_{s',r} \underbrace{\pi(a|s)p(s',r | s,a)}_{probability of triple(a,s',r)} 
+\Bigl[\underbrace{r + \gamma v_\pi(s')}_{outcome} \Bigr ] \]
+
+\subsection{Optimal policies}
+\begin{itemize}
+\item solving a reinforcement learning problem means finding the \textbf{optimal policy}
+\item value functions define a partial ordering over policies. 
+\[ \pi \ge \pi', \text{ iff } v_\pi(s) \ge v_{\pi'}(s)\; \forall s \in \mathcal{S}\]
+\item there is always one policy that is greater or equal all other policies, that is the \textbf{optimal policy}
+\item even there might be more then one optimal policy we denote them $\pi_*$.
+\item all optimal policies share the same value function called the \textbf{optimal value function}
+\[ v_*(s) = \max_\pi v_\pi(s), \; \forall s \in \mathcal{S}\]
+\item all optimal policies share the same action-value function, called the \textbf{optimal action value function}
+\[ q_*(s,a) = \max_\pi q_\pi(s,a), \; \forall s \in \mathcal{S}, \forall a  \mathcal{A}\]
+\end{itemize}
+
+\subsection{Summary}
+RL is about learning from interactions to achieve a goal. The \textit{agents} interacts with the \textit{environment} via \textit{actions}. The agent receives \textit{rewards} and situations, the \textit{states} from the environment. The actions depends on the states. Everything inside the agent is controlled by the agent. Everything outside the agent is the environment. The environment is maybe known, but not controllable.
+\textcolor{red}{Zusammenfassung vervollständigen}
+
 \end{document}
